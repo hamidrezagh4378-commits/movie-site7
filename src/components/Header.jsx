@@ -3,6 +3,9 @@ import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useStore } from '../context/StoreContext.jsx';
 import { PRODUCTS, formatPrice } from '../data/catalog.js';
 import { SITE } from '../data/content.js';
+import { t } from '../i18n/lang.js';
+import { S } from '../i18n/strings.js';
+import { useLang } from '../i18n/LangContext.jsx';
 import { Icon, SmartImage } from './ui.jsx';
 
 function AnnouncementBar() {
@@ -17,14 +20,14 @@ function AnnouncementBar() {
 }
 
 const NAV = [
-  { to: '/', label: 'Home' },
-  { to: '/shop', label: 'Shop' },
-  { to: '/shop?category=skincare', label: 'Skincare' },
-  { to: '/shop?category=makeup', label: 'Makeup' },
-  { to: '/shop?category=haircare', label: 'Haircare' },
-  { to: '/shop?category=bodycare', label: 'Body Care' },
-  { to: '/about', label: 'About Us' },
-  { to: '/contact', label: 'Contact' },
+  { to: '/', label: S.home },
+  { to: '/shop', label: S.shop },
+  { to: '/shop?category=skincare', label: S.skincare },
+  { to: '/shop?category=makeup', label: S.makeup },
+  { to: '/shop?category=haircare', label: S.haircare },
+  { to: '/shop?category=bodycare', label: S.bodycare },
+  { to: '/about', label: S.aboutUs },
+  { to: '/contact', label: S.contact },
 ];
 
 function SearchOverlay({ open, onClose }) {
@@ -58,8 +61,8 @@ function SearchOverlay({ open, onClose }) {
             <input
               ref={inputRef}
               type="search"
-              placeholder="Search serums, lipsticks, masks…"
-              aria-label="Search products"
+              placeholder={t(S.searchPlaceholder)}
+              aria-label={t(S.searchProducts)}
               value={q}
               onChange={(e) => setQ(e.target.value)}
             />
@@ -68,7 +71,7 @@ function SearchOverlay({ open, onClose }) {
           {results.length > 0 && (
             <div className="search-results">
               {results.map((p) => (
-                <button key={p.id} className="search-result" style={{ width: '100%', border: 0, background: 'none', textAlign: 'left', cursor: 'pointer' }} onClick={() => go(p.slug)}>
+                <button key={p.id} className="search-result" style={{ width: '100%', border: 0, background: 'none', textAlign: 'start', cursor: 'pointer' }} onClick={() => go(p.slug)}>
                   <SmartImage src={p.images[0]} alt={p.name} />
                   <span className="search-result__meta">
                     <span className="brand" style={{ display: 'block' }}>{p.brand}</span>
@@ -80,7 +83,7 @@ function SearchOverlay({ open, onClose }) {
             </div>
           )}
           {q.trim().length >= 2 && results.length === 0 && (
-            <p className="search-results__empty">No products match “{q}”. Try “serum”, “lipstick” or “mask”.</p>
+            <p className="search-results__empty">{t(S.noResults).replace('{q}', q)}</p>
           )}
         </div>
       </div>
@@ -99,17 +102,17 @@ function MobileMenu({ open, onClose }) {
       <div className="mobile-menu__scrim" onClick={onClose} />
       <div className="mobile-menu__panel">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span className="logo__text">Menu</span>
+          <span className="logo__text">{t(S.menu)}</span>
           <button className="icon-btn" aria-label="Close menu" onClick={onClose}><Icon name="close" /></button>
         </div>
         <nav>
           {NAV.map((n) => (
-            <NavLink key={n.label} to={n.to} end={n.to === '/'} onClick={onClose}>{n.label}</NavLink>
+            <NavLink key={n.to} to={n.to} end={n.to === '/'} onClick={onClose}>{t(n.label)}</NavLink>
           ))}
         </nav>
         <div className="mobile-menu__foot">
-          <Link to="/account" className="btn btn--outline btn--block" onClick={onClose}>Account</Link>
-          <Link to="/wishlist" className="btn btn--outline btn--block" onClick={onClose}>Wishlist</Link>
+          <Link to="/account" className="btn btn--outline btn--block" onClick={onClose}>{t(S.account)}</Link>
+          <Link to="/wishlist" className="btn btn--outline btn--block" onClick={onClose}>{t(S.wishlist)}</Link>
         </div>
       </div>
     </div>
@@ -121,6 +124,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const { itemCount, wishlist, setCartOpen, user } = useStore();
+  const { lang, toggle } = useLang();
   const location = useLocation();
 
   useEffect(() => {
@@ -152,12 +156,15 @@ export default function Header() {
 
           <nav className="nav" aria-label="Primary">
             {NAV.map((n) => (
-              <NavLink key={n.label} to={n.to} end={n.to === '/'}>{n.label}</NavLink>
+              <NavLink key={n.to} to={n.to} end={n.to === '/'}>{t(n.label)}</NavLink>
             ))}
           </nav>
 
           <div className="header__actions">
-            <button className="icon-btn" aria-label="Search" onClick={() => setSearchOpen(true)}><Icon name="search" /></button>
+            <button className="lang-toggle" aria-label={t(S.language)} title={t(S.language)} onClick={toggle}>
+              {lang === 'fa' ? 'EN' : 'فا'}
+            </button>
+            <button className="icon-btn" aria-label={t(S.search)} onClick={() => setSearchOpen(true)}><Icon name="search" /></button>
             <Link className="icon-btn" aria-label={user ? `Account (${user.name})` : 'Account'} to="/account"><Icon name="user" /></Link>
             <Link className="icon-btn" aria-label={`Wishlist, ${wishlist.length} items`} to="/wishlist">
               <Icon name="heart" />

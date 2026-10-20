@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useStore } from '../context/StoreContext.jsx';
 import { categoryName, formatPrice, variantPrice } from '../data/catalog.js';
 import { PROMO_LABELS } from '../data/content.js';
+import { t } from '../i18n/lang.js';
+import { S } from '../i18n/strings.js';
 import { Icon, SmartImage, Stars } from './ui.jsx';
 
 export default function ProductCard({ product }) {
@@ -16,9 +18,9 @@ export default function ProductCard({ product }) {
       <div className="product-card__media">
         <div className="product-card__badges">
           {onSale && <span className="badge badge--sale">-{discount}%</span>}
-          {product.isNew && <span className="badge badge--new">{PROMO_LABELS.new}</span>}
-          {product.bestseller && !onSale && !product.isNew && <span className="badge">{PROMO_LABELS.bestseller}</span>}
-          {product.stock === 0 && <span className="badge badge--oos">Sold out</span>}
+          {product.isNew && <span className="badge badge--new">{t(PROMO_LABELS.new)}</span>}
+          {product.bestseller && !onSale && !product.isNew && <span className="badge">{t(PROMO_LABELS.bestseller)}</span>}
+          {product.stock === 0 && <span className="badge badge--oos">{t(S.soldOut)}</span>}
         </div>
         <button
           className={`product-card__wish ${wished ? 'is-active' : ''}`}
@@ -43,9 +45,9 @@ export default function ProductCard({ product }) {
           {onSale && <span className="product-card__price-original">{formatPrice(product.originalPrice)}</span>}
         </div>
         {product.stock > 0 && product.stock <= 10 && (
-          <span className="product-card__stock product-card__stock--low">Only {product.stock} left</span>
+          <span className="product-card__stock product-card__stock--low">{t(S.onlyLeft).replace('{n}', product.stock)}</span>
         )}
-        {product.stock === 0 && <span className="product-card__stock" style={{ color: 'var(--error)' }}>Out of stock</span>}
+        {product.stock === 0 && <span className="product-card__stock" style={{ color: 'var(--error)' }}>{t(S.outOfStock)}</span>}
         <div className="product-card__cta">
           <button
             className="btn btn--outline btn--sm btn--block"
@@ -53,7 +55,7 @@ export default function ProductCard({ product }) {
             onClick={() => addToCart(product, null, 1)}
             aria-label={`Add ${product.name} to cart`}
           >
-            {product.stock === 0 ? 'Sold Out' : 'Add to Cart'}
+            {product.stock === 0 ? t(S.soldOut) : t(S.addToCart)}
           </button>
         </div>
       </div>

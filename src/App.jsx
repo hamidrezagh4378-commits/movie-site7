@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { StoreProvider, useStore } from './context/StoreContext.jsx';
+import { LangProvider, useLang } from './i18n/LangContext.jsx';
+import { t } from './i18n/lang.js';
+import { S } from './i18n/strings.js';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import CartDrawer from './components/CartDrawer.jsx';
@@ -23,7 +26,7 @@ function Shell() {
   const { cartOpen } = useStore();
   return (
     <>
-      <a href="#main" className="skip-link">Skip to main content</a>
+      <a href="#main" className="skip-link">{t(S.skipToContent)}</a>
       <ScrollToTop />
       <Header />
       <main id="main" style={{ minHeight: '50vh' }}>
@@ -56,10 +59,20 @@ function Shell() {
   );
 }
 
-export default function App() {
+/* Full remount on language change: data-module accessors resolve at render. */
+function Root() {
+  const { lang } = useLang();
   return (
     <StoreProvider>
-      <Shell />
+      <Shell key={lang} />
     </StoreProvider>
+  );
+}
+
+export default function App() {
+  return (
+    <LangProvider>
+      <Root />
+    </LangProvider>
   );
 }

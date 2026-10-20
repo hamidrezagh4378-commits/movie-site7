@@ -5,6 +5,8 @@ import ProductCarousel from '../components/ProductCarousel.jsx';
 import { Reveal, SmartImage, SectionHead, Icon, Stars } from '../components/ui.jsx';
 import { PRODUCTS, CATEGORIES, productBySlug, categoryName, formatPrice } from '../data/catalog.js';
 import { HERO, BENEFIT_STRIP, WHY_SHOP, ROUTINES, DEMO_REVIEWS, JOURNAL, SITE } from '../data/content.js';
+import { t, formatDate } from '../i18n/lang.js';
+import { S } from '../i18n/strings.js';
 
 /* ---------------- Hero ---------------- */
 function Hero() {
@@ -57,7 +59,7 @@ function CategoryGrid() {
   return (
     <section className="section" aria-labelledby="cat-title">
       <div className="container">
-        <SectionHead eyebrow="Curated Collections" title="Shop by Category" text="Five focused edits, from daily skincare rituals to colour and care." />
+        <SectionHead eyebrow={t(S.curatedCollections)} title={t(S.shopByCategory)} text={t(S.shopByCategoryText)} />
         <div className="cat-grid">
           {CATEGORIES.map((c, i) => (
             <Reveal key={c.id} delay={i * 60}>
@@ -81,21 +83,17 @@ function BrandStory() {
       <div className="container">
         <div className="story-grid">
           <Reveal className="story__text">
-            <span className="eyebrow">Our Philosophy</span>
-            <h2 id="story-title" className="display-2">Beauty Begins With Care</h2>
-            <p className="lead">
-              At Lumière Beauty, we believe that everyday beauty routines should feel thoughtful, effortless,
-              and personal. We bring together carefully selected skincare, cosmetics, and personal care
-              essentials to help you discover products that fit your needs and your lifestyle.
-            </p>
-            <Link className="btn-link" to="/about">Discover Our Story <span className="arrow">→</span></Link>
+            <span className="eyebrow">{t(S.ourPhilosophy)}</span>
+            <h2 id="story-title" className="display-2">{t(S.beautyBeginsWithCare)}</h2>
+            <p className="lead">{t(S.brandStoryLead)}</p>
+            <Link className="btn-link" to="/about">{t(S.discoverStory)} <span className="arrow">→</span></Link>
           </Reveal>
           <Reveal delay={120} className="story__media">
             <div className="story__media-main">
               <SmartImage src="https://images.unsplash.com/photo-1601049676869-702ea24cfd58?auto=format&fit=crop&w=900&q=80" alt="Premium skincare products arranged on a natural stone surface" />
             </div>
             <div className="story__media-side">
-              <SmartImage src="https://images.unsplash.com/photo-1596755389378-c31d21fd1273?auto=format&fit=crop&w=600&q=80" alt="Editorial close-up of botanical beauty ingredients" />
+              <SmartImage src="https://images.unsplash.com/photo-1552046122-03184de85e08?auto=format&fit=crop&w=600&q=85" alt="Editorial close-up of botanical beauty ingredients" />
             </div>
             <Link className="story__arrow" to="/about" aria-label="Discover our story"><Icon name="arrowRight" /></Link>
           </Reveal>
@@ -112,11 +110,11 @@ function Featured() {
   return (
     <section className="section" aria-labelledby="feat-title">
       <div className="container">
-        <SectionHead eyebrow="Bestsellers" title="Customer Favorites" text="Discover the products customers return to, from daily skincare essentials to beauty must-haves." />
+        <SectionHead eyebrow={t(S.bestsellersTitle)} title={t(S.customerFavorites)} text={t(S.favoritesText)} />
         <ProductCarousel products={featured} ariaLabel="Featured bestsellers" />
         {bestsellers.length > 0 && (
           <div style={{ marginTop: 64 }}>
-            <SectionHead split eyebrow="More Loved" title="Also in the Spotlight" />
+            <SectionHead split eyebrow={t(S.moreLoved)} title={t(S.alsoInSpotlight)} />
             <div className="product-grid">
               {bestsellers.map((p, i) => <Reveal key={p.id} delay={i * 50}><ProductCard product={p} /></Reveal>)}
             </div>
@@ -133,7 +131,7 @@ function Routines() {
   return (
     <section className="section section--blush" aria-labelledby="routines-title">
       <div className="container">
-        <SectionHead eyebrow="Curated" title="Beauty Routines" text="Simple, repeatable rituals built from products in our catalogue." />
+        <SectionHead eyebrow={t(S.curated)} title={t(S.beautyRoutines)} text={t(S.routinesText)} />
         <div className="routine-grid">
           {ROUTINES.map((r, i) => (
             <Reveal key={r.title} delay={i * 70}>
@@ -146,7 +144,7 @@ function Routines() {
                     return p ? <Link key={slug} to={`/product/${slug}`}>{p.name} · {formatPrice(p.price)}</Link> : null;
                   })}
                 </div>
-                <Link className="btn-link" to="/shop">Shop All <span className="arrow">→</span></Link>
+                <Link className="btn-link" to="/shop">{t(S.shopAll)} <span className="arrow">→</span></Link>
               </div>
             </Reveal>
           ))}
@@ -161,7 +159,7 @@ function WhyShop() {
   return (
     <section className="section" aria-labelledby="why-title">
       <div className="container">
-        <SectionHead eyebrow="Our Promise" title="Why Shop With Us" text="What we hold ourselves to, on every page and every order." />
+        <SectionHead eyebrow={t(S.ourPromise)} title={t(S.whyShop)} text={t(S.whyShopText)} />
         <div className="why-grid">
           {WHY_SHOP.map((w, i) => (
             <Reveal key={w.title} delay={i * 60}>
@@ -184,7 +182,7 @@ function NewArrivals() {
   return (
     <section className="section section--cream" aria-labelledby="na-title">
       <div className="container">
-        <SectionHead split eyebrow="Just Landed" title="New Arrivals" />
+        <SectionHead split eyebrow={t(S.justLanded)} title={t(S.newArrivalsTitle)} />
         <div className="product-grid">
           {items.map((p, i) => <Reveal key={p.id} delay={i * 50}><ProductCard product={p} /></Reveal>)}
         </div>
@@ -198,7 +196,7 @@ function Reviews() {
   return (
     <section className="section" aria-labelledby="rev-title">
       <div className="container">
-        <SectionHead eyebrow="Kind Words" title="Customer Reviews" text="Demonstration reviews shown until genuine customer feedback is connected." />
+        <SectionHead eyebrow={t(S.kindWords)} title={t(S.customerReviews)} text={t(S.kindWordsText)} />
         <div className="review-grid">
           {DEMO_REVIEWS.map((r, i) => (
             <Reveal key={r.name} delay={i * 70}>
@@ -207,7 +205,7 @@ function Reviews() {
                 <blockquote>“{r.text}”</blockquote>
                 <div className="review-card__meta">
                   <span className="review-card__avatar">{r.initials}</span>
-                  <div><div className="review-card__name">{r.name}</div><div className="review-card__tag">Sample review · {r.product}</div></div>
+                  <div><div className="review-card__name">{r.name}</div><div className="review-card__tag">{t(S.demoReview)} · {r.product}</div></div>
                 </div>
               </div>
             </Reveal>
@@ -223,16 +221,16 @@ export function JournalSection() {
   return (
     <section className="section section--cream" aria-labelledby="journal-title">
       <div className="container">
-        <SectionHead split eyebrow="Editorial" title="Beauty Journal" />
+        <SectionHead split eyebrow={t(S.editorial)} title={t(S.beautyJournal)} />
         <div className="journal-grid">
           {JOURNAL.map((a, i) => (
             <Reveal key={a.slug} delay={i * 70}>
               <Link className="journal-card" to={`/journal/${a.slug}`}>
                 <div className="journal-card__img"><SmartImage src={a.image} alt={a.title} /></div>
-                <span className="journal-card__date">{new Date(a.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                <span className="journal-card__date">{formatDate(a.date)}</span>
                 <h3>{a.title}</h3>
                 <p>{a.excerpt}</p>
-                <span className="btn-link" style={{ marginTop: 8 }}>Read More <span className="arrow">→</span></span>
+                <span className="btn-link" style={{ marginTop: 8 }}>{t(S.readMore)} <span className="arrow">→</span></span>
               </Link>
             </Reveal>
           ))}
@@ -255,10 +253,10 @@ function CtaSection() {
                 <circle cx="27" cy="15" r="2.2" fill="currentColor" stroke="none" />
               </svg>
             </div>
-            <h2 id="cta-title">Your Next Beauty Favorite Awaits.</h2>
-            <p>Explore thoughtfully selected essentials and create a beauty routine that feels uniquely yours.</p>
+            <h2 id="cta-title">{t(S.ctaTitle)}</h2>
+            <p>{t(S.ctaText)}</p>
           </div>
-          <Link className="btn btn--gold" to="/shop">Explore the Collection →</Link>
+          <Link className="btn btn--gold" to="/shop">{t(S.exploreCollection)} →</Link>
         </div>
       </div>
     </section>

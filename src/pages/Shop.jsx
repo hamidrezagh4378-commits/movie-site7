@@ -5,13 +5,15 @@ import ProductFilters from '../components/ProductFilters.jsx';
 import { Icon } from '../components/ui.jsx';
 import { PRODUCTS, categoryName } from '../data/catalog.js';
 import { useStore } from '../context/StoreContext.jsx';
+import { t } from '../i18n/lang.js';
+import { S } from '../i18n/strings.js';
 
 const SORTS = [
-  ['popularity', 'Most Popular'],
-  ['price-asc', 'Price: Low to High'],
-  ['price-desc', 'Price: High to Low'],
-  ['newest', 'Newest'],
-  ['rating', 'Customer Rating'],
+  ['popularity', S.mostPopular],
+  ['price-asc', S.priceLowHigh],
+  ['price-desc', S.priceHighLow],
+  ['newest', S.newest],
+  ['rating', S.customerRating],
 ];
 
 const PAGE_SIZE = 9;
@@ -78,7 +80,7 @@ export default function Shop() {
   filters.brand.forEach((b) => chips.push({ group: 'brand', value: b, label: b }));
   if (filters.priceMin != null || filters.priceMax != null) chips.push({ group: 'price', label: `$${filters.priceMin ?? 0} – $${filters.priceMax ?? '∞'}` });
   if (filters.minRating) chips.push({ group: 'minRating', label: `${filters.minRating}+ ★` });
-  if (filters.inStockOnly) chips.push({ group: 'inStockOnly', label: 'In stock' });
+  if (filters.inStockOnly) chips.push({ group: 'inStockOnly', label: t(S.inStockChip) });
   Object.entries(filters).forEach(([k, v]) => {
     if (k.startsWith('attr:') && v?.length) v.forEach((val) => chips.push({ group: k, value: val, label: val }));
   });
@@ -109,10 +111,10 @@ export default function Shop() {
       <div className="container" ref={topRef}>
         <div className="page-head">
           <span className="eyebrow eyebrow--rose">
-            {q ? 'Search Results' : collection ? 'Collection' : filters.category.length === 1 ? categoryName(filters.category[0]) : 'Shop All'}
+            {q ? t(S.searchResults) : collection ? t(S.collection) : filters.category.length === 1 ? categoryName(filters.category[0]) : t(S.shopAllTitle)}
           </span>
-          <h1>{q ? `“${q}”` : collection ? collection === 'bestsellers' ? 'Bestsellers' : collection === 'sale' ? 'Sale' : 'New Arrivals' : filters.category.length === 1 ? categoryName(filters.category[0]) : 'Shop All'}</h1>
-          <p>Thoughtfully selected beauty and personal care essentials. Sample catalogue — demonstration prices.</p>
+          <h1>{q ? `“${q}”` : collection ? collection === 'bestsellers' ? t(S.bestsellersTitle) : collection === 'sale' ? t(S.saleTitle) : t(S.newArrivalsTitle) : filters.category.length === 1 ? categoryName(filters.category[0]) : t(S.shopAllTitle)}</h1>
+          <p>{t(S.shopSubtitle)}</p>
         </div>
 
         <div className="shop-layout">
@@ -123,16 +125,16 @@ export default function Shop() {
           <div>
             <div className="shop-toolbar">
               <span className="shop-toolbar__count" aria-live="polite">
-                {filtered.length} product{filtered.length !== 1 && 's'}
-                {q && <> for “{q}”</>}
+                {t(S.productsCount).replace('{n}', filtered.length)}
+                {q && ` ${t(S.forQuery).replace('{q}', q)}`}
               </span>
               <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                 <button className="filters-toggle" aria-expanded={drawerOpen} onClick={() => setDrawerOpen(true)}>
-                  <Icon name="filter" size={15} /> Filters
+                  <Icon name="filter" size={15} /> {t(S.filters)}
                 </button>
-                <label className="visually-hidden" htmlFor="sort">Sort products</label>
+                <label className="visually-hidden" htmlFor="sort">{t(S.sortProducts)}</label>
                 <select id="sort" value={sort} onChange={(e) => setSort(e.target.value)}>
-                  {SORTS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+                  {SORTS.map(([v, l]) => <option key={v} value={v}>{t(l)}</option>)}
                 </select>
               </div>
             </div>
@@ -144,16 +146,16 @@ export default function Shop() {
                     {c.label} <Icon name="close" size={11} />
                   </button>
                 ))}
-                <button className="chip chip--clear" onClick={clearAll}>Clear all</button>
+                <button className="chip chip--clear" onClick={clearAll}>{t(S.clearAll)}</button>
               </div>
             )}
 
             {shown.length === 0 ? (
               <div className="empty-state">
                 <Icon name="search" size={46} />
-                <h3>No products match</h3>
-                <p className="muted">Try adjusting or removing some filters, or clearing your search.</p>
-                <button className="btn btn--outline" onClick={clearAll}>Clear all filters</button>
+                <h3>{t(S.noProductsMatch)}</h3>
+                <p className="muted">{t(S.tryAdjusting)}</p>
+                <button className="btn btn--outline" onClick={clearAll}>{t(S.clearAllFilters)}</button>
               </div>
             ) : (
               <>
@@ -163,7 +165,7 @@ export default function Shop() {
                 {visible < filtered.length && (
                   <div className="load-more">
                     <button className="btn btn--outline" onClick={() => setVisible((v) => v + PAGE_SIZE)}>
-                      Load More ({filtered.length - visible} remaining)
+                      {t(S.loadMore)} {t(S.remaining).replace('{n}', filtered.length - visible)}
                     </button>
                   </div>
                 )}
@@ -178,12 +180,12 @@ export default function Shop() {
         <div className="drawer__scrim" onClick={() => setDrawerOpen(false)} />
         <div className="drawer__panel">
           <div className="drawer__head">
-            <h2>Filters</h2>
+            <h2>{t(S.filters)}</h2>
             <button className="icon-btn" aria-label="Close filters" onClick={() => setDrawerOpen(false)}><Icon name="close" /></button>
           </div>
           <div className="drawer__body">{filtersPanel}</div>
           <div className="drawer__foot">
-            <button className="btn btn--primary btn--block" onClick={() => setDrawerOpen(false)}>Show {filtered.length} products</button>
+            <button className="btn btn--primary btn--block" onClick={() => setDrawerOpen(false)}>{t(S.showNProducts).replace('{n}', filtered.length)}</button>
           </div>
         </div>
       </div>

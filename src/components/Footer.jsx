@@ -1,23 +1,25 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SITE } from '../data/content.js';
+import { t } from '../i18n/lang.js';
+import { S } from '../i18n/strings.js';
 import { Icon } from './ui.jsx';
 
 const SHOP_LINKS = [
-  { to: '/', label: 'Home' },
-  { to: '/shop', label: 'Shop' },
-  { to: '/shop?category=skincare', label: 'Skincare' },
-  { to: '/shop?category=makeup', label: 'Makeup' },
-  { to: '/shop?category=haircare', label: 'Haircare' },
-  { to: '/shop?category=bodycare', label: 'Body Care' },
+  { to: '/', label: S.home },
+  { to: '/shop', label: S.shop },
+  { to: '/shop?category=skincare', label: S.skincare },
+  { to: '/shop?category=makeup', label: S.makeup },
+  { to: '/shop?category=haircare', label: S.haircare },
+  { to: '/shop?category=bodycare', label: S.bodycare },
 ];
 
 const INFO_LINKS = [
-  { to: '/about', label: 'About Us' },
-  { to: '/contact', label: 'Contact' },
-  { to: '/faq', label: 'FAQ' },
-  { to: '/shipping-returns', label: 'Shipping & Returns' },
-  { to: '/journal', label: 'Beauty Journal' },
+  { to: '/about', label: S.aboutUs },
+  { to: '/contact', label: S.contact },
+  { to: '/faq', label: S.faq },
+  { to: '/shipping-returns', label: S.shippingReturns },
+  { to: '/journal', label: S.beautyJournal },
 ];
 
 function NewsletterForm() {
@@ -27,20 +29,20 @@ function NewsletterForm() {
     e.preventDefault();
     const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
     if (!valid) {
-      setStatus({ ok: false, message: 'Please enter a valid email address.' });
+      setStatus({ ok: false, message: t(S.invalidEmail) });
       return;
     }
     // No email backend connected — demonstration subscription only.
-    setStatus({ ok: true, message: 'Subscribed (demonstration — no email was sent).' });
+    setStatus({ ok: true, message: t(S.subscribedDemo) });
     setEmail('');
   };
   return (
     <div>
-      <p style={{ fontSize: 14, color: '#c4b3ba' }}>Subscribe for special offers, beauty tips and more.</p>
+      <p style={{ fontSize: 14, color: '#c4b3ba' }}>{t(S.newsletterHint)}</p>
       <form className="newsletter-form" onSubmit={submit} noValidate>
-        <label htmlFor="nl-email" className="visually-hidden">Email address</label>
-        <input id="nl-email" type="email" placeholder="Enter your email address" value={email} onChange={(e) => setEmail(e.target.value)} aria-invalid={status && !status.ok} />
-        <button type="submit">Subscribe</button>
+        <label htmlFor="nl-email" className="visually-hidden">{t(S.email)}</label>
+        <input id="nl-email" type="email" placeholder={t(S.emailPlaceholder)} value={email} onChange={(e) => setEmail(e.target.value)} aria-invalid={status && !status.ok} />
+        <button type="submit">{t(S.subscribe)}</button>
       </form>
       {status && <p className={`newsletter-msg ${status.ok ? 'newsletter-msg--ok' : 'newsletter-msg--err'}`} role="status">{status.message}</p>}
     </div>
@@ -72,29 +74,29 @@ export default function Footer() {
             </div>
           </div>
           <div>
-            <h4>Quick Links</h4>
-            <ul>{SHOP_LINKS.map((l) => <li key={l.label}><Link to={l.to}>{l.label}</Link></li>)}</ul>
+            <h4>{t(S.quickLinks)}</h4>
+            <ul>{SHOP_LINKS.map((l) => <li key={l.to}><Link to={l.to}>{t(l.label)}</Link></li>)}</ul>
           </div>
           <div>
-            <h4>Customer Care</h4>
-            <ul>{INFO_LINKS.map((l) => <li key={l.label}><Link to={l.to}>{l.label}</Link></li>)}</ul>
+            <h4>{t(S.customerCare)}</h4>
+            <ul>{INFO_LINKS.map((l) => <li key={l.to}><Link to={l.to}>{t(l.label)}</Link></li>)}</ul>
           </div>
           <div>
-            <h4>Newsletter</h4>
+            <h4>{t(S.newsletter)}</h4>
             <NewsletterForm />
             <div className="footer__contact" style={{ marginTop: 20 }}>
               <span>Email: {SITE.contact.email}</span>
-              <span>Support hours: {SITE.contact.hours}</span>
+              <span>{t(S.supportHours)}: {SITE.contact.hours}</span>
             </div>
-            <p className="footer__note">Contact details are editable placeholders — no real business information is implied.</p>
+            <p className="footer__note">{t(S.footerNote)}</p>
           </div>
         </div>
         <div className="footer__bottom">
-          <span className="footer__copyright">© {new Date().getFullYear()} Lumière Beauty. All rights reserved.</span>
+          <span className="footer__copyright">© {new Date().getFullYear()} Lumière Beauty. {t(S.allRights)}</span>
           <div className="footer__legal">
-            <Link to="/privacy">Privacy Policy</Link>
-            <Link to="/terms">Terms &amp; Conditions</Link>
-            <Link to="/shipping-returns">Shipping &amp; Returns</Link>
+            <Link to="/privacy">{t(S.privacyPolicy)}</Link>
+            <Link to="/terms">{t(S.terms)}</Link>
+            <Link to="/shipping-returns">{t(S.shippingReturns)}</Link>
           </div>
         </div>
       </div>

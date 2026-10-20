@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../context/StoreContext.jsx';
 import { formatPrice } from '../data/catalog.js';
 import { SITE } from '../data/content.js';
+import { t } from '../i18n/lang.js';
+import { S } from '../i18n/strings.js';
 import { CartSummary } from './CartPage.jsx';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -21,9 +23,9 @@ export default function Checkout() {
     return (
       <div className="page container">
         <div className="empty-state">
-          <h3>Nothing to check out</h3>
-          <p className="muted">Your bag is empty — add a few products first.</p>
-          <Link className="btn btn--primary" to="/shop">Shop Products</Link>
+          <h3>{t(S.nothingToCheckout)}</h3>
+          <p className="muted">{t(S.nothingToCheckoutHint)}</p>
+          <Link className="btn btn--primary" to="/shop">{t(S.shopProducts)}</Link>
         </div>
       </div>
     );
@@ -38,13 +40,13 @@ export default function Checkout() {
 
   const validate = () => {
     const e = {};
-    if (!form.name.trim()) e.name = 'Please enter your full name.';
-    if (!EMAIL_RE.test(form.email)) e.email = 'Please enter a valid email address.';
-    if (form.phone && !/^[+\d\s()-]{6,}$/.test(form.phone)) e.phone = 'Please enter a valid phone number.';
-    if (!form.address.trim()) e.address = 'Please enter your street address.';
-    if (!form.city.trim()) e.city = 'Please enter your city.';
-    if (!form.postal.trim()) e.postal = 'Please enter your postal code.';
-    if (!terms) e.terms = 'Please accept the terms to continue.';
+    if (!form.name.trim()) e.name = t(S.eName);
+    if (!EMAIL_RE.test(form.email)) e.email = t(S.eEmail);
+    if (form.phone && !/^[+\d\s()-]{6,}$/.test(form.phone)) e.phone = t(S.ePhone);
+    if (!form.address.trim()) e.address = t(S.eAddress);
+    if (!form.city.trim()) e.city = t(S.eCity);
+    if (!form.postal.trim()) e.postal = t(S.ePostal);
+    if (!terms) e.terms = t(S.eTerms);
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -68,26 +70,26 @@ export default function Checkout() {
   return (
     <div className="page container">
       <div className="page-head">
-        <h1>Checkout</h1>
-        <p>Demonstration checkout — no real payment is processed and no card details are stored.</p>
+        <h1>{t(S.checkout)}</h1>
+        <p>{t(S.demoCheckoutNote)}</p>
       </div>
       <div className="checkout-layout">
         <form onSubmit={submit} noValidate>
           <section className="checkout-section">
-            <h2><span className="num">1</span> Customer Information</h2>
+            <h2><span className="num">1</span> {t(S.customerInfo)}</h2>
             <div className="form-grid">
               <div className={`field ${errors.name ? 'has-error' : ''}`}>
-                <label htmlFor="co-name">Full name *</label>
+                <label htmlFor="co-name">{t(S.fullNameStar)}</label>
                 <input id="co-name" className="input" value={form.name} onChange={set('name')} aria-invalid={!!errors.name} />
                 {err('name')}
               </div>
               <div className={`field ${errors.email ? 'has-error' : ''}`}>
-                <label htmlFor="co-email">Email *</label>
+                <label htmlFor="co-email">{t(S.emailStar)}</label>
                 <input id="co-email" className="input" type="email" value={form.email} onChange={set('email')} aria-invalid={!!errors.email} />
                 {err('email')}
               </div>
               <div className={`field field--full ${errors.phone ? 'has-error' : ''}`}>
-                <label htmlFor="co-phone">Phone (optional)</label>
+                <label htmlFor="co-phone">{t(S.phoneOptional)}</label>
                 <input id="co-phone" className="input" type="tel" value={form.phone} onChange={set('phone')} aria-invalid={!!errors.phone} />
                 {err('phone')}
               </div>
@@ -95,25 +97,25 @@ export default function Checkout() {
           </section>
 
           <section className="checkout-section">
-            <h2><span className="num">2</span> Shipping Address</h2>
+            <h2><span className="num">2</span> {t(S.shippingAddress)}</h2>
             <div className="form-grid">
               <div className={`field field--full ${errors.address ? 'has-error' : ''}`}>
-                <label htmlFor="co-addr">Street address *</label>
+                <label htmlFor="co-addr">{t(S.streetAddress)}</label>
                 <input id="co-addr" className="input" value={form.address} onChange={set('address')} aria-invalid={!!errors.address} />
                 {err('address')}
               </div>
               <div className={`field ${errors.city ? 'has-error' : ''}`}>
-                <label htmlFor="co-city">City *</label>
+                <label htmlFor="co-city">{t(S.city)}</label>
                 <input id="co-city" className="input" value={form.city} onChange={set('city')} aria-invalid={!!errors.city} />
                 {err('city')}
               </div>
               <div className={`field ${errors.postal ? 'has-error' : ''}`}>
-                <label htmlFor="co-postal">Postal code *</label>
+                <label htmlFor="co-postal">{t(S.postalCode)}</label>
                 <input id="co-postal" className="input" value={form.postal} onChange={set('postal')} aria-invalid={!!errors.postal} />
                 {err('postal')}
               </div>
               <div className="field field--full">
-                <label htmlFor="co-country">Country</label>
+                <label htmlFor="co-country">{t(S.country)}</label>
                 <select id="co-country" className="select" value={form.country} onChange={set('country')}>
                   {['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Other'].map((c) => <option key={c}>{c}</option>)}
                 </select>
@@ -122,52 +124,50 @@ export default function Checkout() {
           </section>
 
           <section className="checkout-section">
-            <h2><span className="num">3</span> Delivery Method</h2>
+            <h2><span className="num">3</span> {t(S.deliveryMethod)}</h2>
             <label className={`radio-option ${delivery === 'standard' ? 'is-selected' : ''}`}>
               <input type="radio" name="delivery" value="standard" checked={delivery === 'standard'} onChange={() => setDelivery('standard')} />
-              <span style={{ flex: 1 }}><span className="r1">Standard · 3–5 business days</span><span className="r2" style={{ display: 'block' }}>{freeShip ? 'Complimentary on orders over ' + formatPrice(SITE.freeShippingThreshold) : formatPrice(SITE.shippingFlat)}</span></span>
-              <span style={{ fontWeight: 600 }}>{freeShip ? 'Free' : formatPrice(SITE.shippingFlat)}</span>
+              <span style={{ flex: 1 }}><span className="r1">{t(S.standardDelivery)}</span><span className="r2" style={{ display: 'block' }}>{freeShip ? t(S.freeOver).replace('{v}', formatPrice(SITE.freeShippingThreshold)) : formatPrice(SITE.shippingFlat)}</span></span>
+              <span style={{ fontWeight: 600 }}>{freeShip ? t(S.complimentary) : formatPrice(SITE.shippingFlat)}</span>
             </label>
             <label className={`radio-option ${delivery === 'express' ? 'is-selected' : ''}`}>
               <input type="radio" name="delivery" value="express" checked={delivery === 'express'} onChange={() => setDelivery('express')} />
-              <span style={{ flex: 1 }}><span className="r1">Express · 1–2 business days</span><span className="r2" style={{ display: 'block' }}>Priority handling</span></span>
+              <span style={{ flex: 1 }}><span className="r1">{t(S.expressDelivery)}</span><span className="r2" style={{ display: 'block' }}>{t(S.priorityHandling)}</span></span>
               <span style={{ fontWeight: 600 }}>{formatPrice(SITE.shippingExpress)}</span>
             </label>
           </section>
 
           <section className="checkout-section">
-            <h2><span className="num">4</span> Payment Method</h2>
+            <h2><span className="num">4</span> {t(S.paymentMethod)}</h2>
             <label className={`radio-option ${payment === 'cod' ? 'is-selected' : ''}`}>
               <input type="radio" name="payment" value="cod" checked={payment === 'cod'} onChange={() => setPayment('cod')} />
-              <span><span className="r1">Cash on Delivery</span><span className="r2" style={{ display: 'block' }}>Pay when your order arrives</span></span>
+              <span><span className="r1">{t(S.cashOnDelivery)}</span><span className="r2" style={{ display: 'block' }}>{t(S.payOnArrival)}</span></span>
             </label>
             <label className={`radio-option ${payment === 'card' ? 'is-selected' : ''}`}>
               <input type="radio" name="payment" value="card" checked={payment === 'card'} onChange={() => setPayment('card')} />
-              <span><span className="r1">Credit / Debit Card</span><span className="r2" style={{ display: 'block' }}>Integration point for a real payment gateway</span></span>
+              <span><span className="r1">{t(S.card)}</span><span className="r2" style={{ display: 'block' }}>{t(S.cardNote)}</span></span>
             </label>
             {payment === 'card' && (
-              <p className="demo-payment-note">
-                This storefront is a demonstration: no card fields are shown, no payment is processed and no card data is stored. Connect a real payment provider here in production.
-              </p>
+              <p className="demo-payment-note">{t(S.cardDemoNote)}</p>
             )}
           </section>
 
           <section className="checkout-section">
-            <h2><span className="num">5</span> Review &amp; Place Order</h2>
+            <h2><span className="num">5</span> {t(S.reviewAndPlace)}</h2>
             <label className={`checkbox-row ${errors.terms ? 'has-error' : ''}`} style={{ marginBottom: 16 }}>
               <input type="checkbox" checked={terms} onChange={(e) => setTerms(e.target.checked)} aria-invalid={!!errors.terms} />
-              <span>I agree to the <Link to="/terms" style={{ textDecoration: 'underline' }}>Terms &amp; Conditions</Link> and confirm this is a demonstration order.</span>
+              <span>{t(S.agreeTermsStart)} <Link to="/terms" style={{ textDecoration: 'underline' }}>{t(S.terms)}</Link> {t(S.agreeTermsEnd)}</span>
             </label>
             {err('terms')}
             <button className="btn btn--primary btn--block" type="submit" disabled={submitting}>
-              Place Order — {formatPrice(total)}
+              {t(S.placeOrder)} — {formatPrice(total)}
             </button>
           </section>
         </form>
 
         <div>
           <div className="summary-card">
-            <h2>Order Summary</h2>
+            <h2>{t(S.orderSummary)}</h2>
             {cartDetailed.map((i) => (
               <div className="order-item-line" key={`${i.productId}-${i.variantId}`}>
                 <span><span className="n">{i.qty}×</span> {i.product.name}{i.variant ? ` — ${i.variant.name}` : ''}</span>
@@ -175,12 +175,12 @@ export default function Checkout() {
               </div>
             ))}
             <div className="drawer__summary" style={{ marginTop: 14 }}>
-              <div className="summary-row"><span>Subtotal</span><span>{formatPrice(subtotal)}</span></div>
-              {coupon && <div className="summary-row"><span>Promo: {coupon.code}</span><span style={{ color: 'var(--success)' }}>−{formatPrice(discount)}</span></div>}
-              <div className="summary-row"><span>Shipping ({express ? 'express' : 'standard'})</span>{shippingCost === 0 ? <span className="free">Complimentary</span> : <span>{formatPrice(shippingCost)}</span>}</div>
-              <div className="summary-row summary-row--total"><span>Total</span><span>{formatPrice(total)}</span></div>
+              <div className="summary-row"><span>{t(S.subtotal)}</span><span>{formatPrice(subtotal)}</span></div>
+              {coupon && <div className="summary-row"><span>{t(S.promo)}: {coupon.code}</span><span style={{ color: 'var(--success)' }}>−{formatPrice(discount)}</span></div>}
+              <div className="summary-row"><span>{t(S.shipping)} ({express ? t(S.shippingExpr) : t(S.shippingStd)})</span>{shippingCost === 0 ? <span className="free">{t(S.complimentary)}</span> : <span>{formatPrice(shippingCost)}</span>}</div>
+              <div className="summary-row summary-row--total"><span>{t(S.total)}</span><span>{formatPrice(total)}</span></div>
             </div>
-            <p className="form-note">Coupon codes can be applied on the <Link to="/cart" style={{ textDecoration: 'underline' }}>bag page</Link>.</p>
+            <p className="form-note">{t(S.couponNote)} <Link to="/cart" style={{ textDecoration: 'underline' }}>{t(S.bagPage)}</Link>.</p>
           </div>
         </div>
       </div>

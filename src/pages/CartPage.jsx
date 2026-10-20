@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../context/StoreContext.jsx';
 import { formatPrice } from '../data/catalog.js';
 import { SITE } from '../data/content.js';
+import { t } from '../i18n/lang.js';
+import { S } from '../i18n/strings.js';
 import { Icon, SmartImage, Qty } from '../components/ui.jsx';
 
 export function CartSummary({ couponInput = false }) {
@@ -24,36 +26,36 @@ export function CartSummary({ couponInput = false }) {
 
   return (
     <div className="summary-card">
-      <h2>Order Summary</h2>
+      <h2>{t(S.orderSummary)}</h2>
       <div className="drawer__summary">
-        <div className="summary-row"><span>Subtotal</span><span>{formatPrice(subtotal)}</span></div>
+        <div className="summary-row"><span>{t(S.subtotal)}</span><span>{formatPrice(subtotal)}</span></div>
         {coupon && (
           <div className="summary-row">
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-              Promo: {coupon.code}
-              <button className="coupon-chip" onClick={() => removeCoupon()} aria-label={`Remove coupon ${coupon.code}`}>
-                <Icon name="close" size={11} /> remove
+              {t(S.promo)}: {coupon.code}
+              <button className="coupon-chip" onClick={() => removeCoupon()} aria-label={`${t(S.removeCoupon)} ${coupon.code}`}>
+                <Icon name="close" size={11} /> {t(S.removeCoupon)}
               </button>
             </span>
             <span style={{ color: 'var(--success)' }}>−{formatPrice(discount)}</span>
           </div>
         )}
         <div className="summary-row">
-          <span>Shipping (standard)</span>
-          {cartDetailed.length === 0 ? <span>—</span> : hasItems ? <span className="free">Complimentary</span> : <span>{formatPrice(shipping)}</span>}
+          <span>{t(S.standardShip)}</span>
+          {cartDetailed.length === 0 ? <span>—</span> : hasItems ? <span className="free">{t(S.complimentary)}</span> : <span>{formatPrice(shipping)}</span>}
         </div>
-        <div className="summary-row summary-row--total"><span>Total</span><span>{formatPrice(total)}</span></div>
+        <div className="summary-row summary-row--total"><span>{t(S.total)}</span><span>{formatPrice(total)}</span></div>
       </div>
       {couponInput && (
         cartDetailed.length > 0 && (
           <div>
             <form className="coupon-row" onSubmit={submitCoupon}>
-              <label className="visually-hidden" htmlFor="coupon">Promotional code</label>
-              <input id="coupon" placeholder="Promo code" value={code} onChange={(e) => setCode(e.target.value)} />
-              <button type="submit" className="btn btn--outline btn--sm">Apply</button>
+              <label className="visually-hidden" htmlFor="coupon">{t(S.promoCode)}</label>
+              <input id="coupon" placeholder={t(S.promoCode)} value={code} onChange={(e) => setCode(e.target.value)} />
+              <button type="submit" className="btn btn--outline btn--sm">{t(S.apply)}</button>
             </form>
             {msg && <p className={`form-note ${msg.ok ? '' : 'field-error'}`} role="status">{msg.message}</p>}
-            <p className="form-note">Sample codes: GLOW15 (15% off) · WELCOME10 (10% off)</p>
+            <p className="form-note">{t(S.sampleCodes)}</p>
           </div>
         )
       )}
@@ -70,9 +72,9 @@ export default function CartPage() {
       <div className="page container">
         <div className="empty-state">
           <Icon name="bag" size={46} />
-          <h3>Your bag is empty</h3>
-          <p className="muted">Once you add products, they will appear here.</p>
-          <Link className="btn btn--primary" to="/shop">Continue Shopping</Link>
+          <h3>{t(S.yourBagEmpty)}</h3>
+          <p className="muted">{t(S.bagEmptyHint2)}</p>
+          <Link className="btn btn--primary" to="/shop">{t(S.continueShopping)}</Link>
         </div>
       </div>
     );
@@ -81,8 +83,8 @@ export default function CartPage() {
   return (
     <div className="page container">
       <div className="page-head">
-        <h1>Shopping Bag</h1>
-        <p>{cartDetailed.length} item{cartDetailed.length !== 1 && 's'} in your bag</p>
+        <h1>{t(S.shoppingBag)}</h1>
+        <p>{t(S.itemsInBag).replace('{n}', cartDetailed.length)}</p>
       </div>
       <div className="cart-page">
         <div>
@@ -95,7 +97,7 @@ export default function CartPage() {
                 <span className="product-card__brand">{item.product.brand}</span>
                 <Link to={`/product/${item.product.slug}`} className="product-card__name" style={{ display: 'block', margin: '2px 0' }}>{item.product.name}</Link>
                 {item.variant && <p className="small muted">{item.variant.name}</p>}
-                {item.overStock && <p className="field-error">Only {item.product.stock} available — quantity adjusted at checkout</p>}
+                {item.overStock && <p className="field-error">{t(S.quantityAdjusted).replace('{n}', item.product.stock)}</p>}
                 <div style={{ display: 'flex', gap: 14, alignItems: 'center', marginTop: 10 }}>
                   <Qty value={item.qty} max={item.maxQty} onChange={(q) => setQty(item.productId, item.variantId, q)} />
                   <button className="cart-item__remove" onClick={() => removeFromCart(item.productId, item.variantId)}>Remove</button>
@@ -103,22 +105,22 @@ export default function CartPage() {
               </div>
               <div className="cart-item__end">
                 <span className="cart-item__price">{formatPrice(item.lineTotal)}</span>
-                <span className="small muted">{formatPrice(item.unitPrice)} each</span>
+                <span className="small muted">{formatPrice(item.unitPrice)} {t(S.each)}</span>
               </div>
             </div>
           ))}
           <div style={{ marginTop: 24, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Link className="btn btn--outline" to="/shop">Continue Shopping</Link>
-            <button className="btn btn--outline" onClick={() => setCartOpen(true)}>Open Quick Bag</button>
+            <Link className="btn btn--outline" to="/shop">{t(S.continueShopping)}</Link>
+            <button className="btn btn--outline" onClick={() => setCartOpen(true)}>{t(S.openQuickBag)}</button>
           </div>
         </div>
         <div>
           <CartSummary couponInput />
           <button className="btn btn--primary btn--block" style={{ marginTop: 14 }} onClick={() => navigate('/checkout')}>
-            Proceed to Checkout
+            {t(S.proceedToCheckout)}
           </button>
           <p className="form-note" style={{ marginTop: 10, textAlign: 'center' }}>
-            Demonstration checkout — no payment is processed.
+            {t(S.demoCheckoutNote)}
           </p>
         </div>
       </div>

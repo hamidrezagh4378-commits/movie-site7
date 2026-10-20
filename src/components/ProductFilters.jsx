@@ -1,5 +1,7 @@
 import React from 'react';
 import { CATEGORIES, PRODUCTS, categoryName } from '../data/catalog.js';
+import { t } from '../i18n/lang.js';
+import { S } from '../i18n/strings.js';
 
 /*
  * Product filters. Only attribute groups relevant to the currently
@@ -16,8 +18,8 @@ export default function ProductFilters({ filters, onChange, relevantAttrs }) {
   const setPrice = (min, max) => onChange({ ...filters, priceMin: min, priceMax: max });
 
   const groups = [
-    { key: 'category', title: 'Category', options: CATEGORIES.map((c) => ({ value: c.id, label: c.name })) },
-    { key: 'brand', title: 'Brand', options: brands.map((b) => ({ value: b, label: b })) },
+    { key: 'category', title: t(S.category), options: CATEGORIES.map((c) => ({ value: c.id, label: c.name })) },
+    { key: 'brand', title: t(S.brand), options: brands.map((b) => ({ value: b, label: b })) },
   ];
 
   const attrGroups = Object.entries(relevantAttrs || {}).map(([key, values]) => ({
@@ -53,18 +55,18 @@ export default function ProductFilters({ filters, onChange, relevantAttrs }) {
       ))}
 
       <div className="filters__group">
-        <p className="filters__title">Price</p>
+        <p className="filters__title">{t(S.price)}</p>
         <div className="price-inputs">
-          <label className="visually-hidden" htmlFor="f-min">Minimum price</label>
-          <input id="f-min" type="number" min="0" placeholder="Min" value={filters.priceMin ?? ''} onChange={(e) => setPrice(e.target.value === '' ? null : Number(e.target.value), filters.priceMax)} />
+          <label className="visually-hidden" htmlFor="f-min">{t(S.min)}</label>
+          <input id="f-min" type="number" min="0" placeholder={t(S.min)} value={filters.priceMin ?? ''} onChange={(e) => setPrice(e.target.value === '' ? null : Number(e.target.value), filters.priceMax)} />
           <span>–</span>
-          <label className="visually-hidden" htmlFor="f-max">Maximum price</label>
-          <input id="f-max" type="number" min="0" placeholder="Max" value={filters.priceMax ?? ''} onChange={(e) => setPrice(filters.priceMin, e.target.value === '' ? null : Number(e.target.value))} />
+          <label className="visually-hidden" htmlFor="f-max">{t(S.max)}</label>
+          <input id="f-max" type="number" min="0" placeholder={t(S.max)} value={filters.priceMax ?? ''} onChange={(e) => setPrice(filters.priceMin, e.target.value === '' ? null : Number(e.target.value))} />
         </div>
       </div>
 
       <div className="filters__group">
-        <p className="filters__title">Rating</p>
+        <p className="filters__title">{t(S.rating)}</p>
         <div className="filters__options">
           {[4.5, 4, 3.5].map((r) => (
             <label key={r} className="filter-check">
@@ -76,10 +78,10 @@ export default function ProductFilters({ filters, onChange, relevantAttrs }) {
       </div>
 
       <div className="filters__group">
-        <p className="filters__title">Availability</p>
+        <p className="filters__title">{t(S.availability)}</p>
         <label className="filter-check">
           <input type="checkbox" checked={!!filters.inStockOnly} onChange={(e) => onChange({ ...filters, inStockOnly: e.target.checked })} />
-          In stock only
+          {t(S.inStockOnly)}
         </label>
       </div>
 

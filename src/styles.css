@@ -738,3 +738,54 @@ ul { margin: 0; padding: 0; list-style: none; }
 .skip-link:focus { left: 0; }
 .tag-pill { display: inline-block; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: var(--cream); color: var(--plum-soft); border: 1px solid var(--border); }
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ============================================================
+   Language toggle
+   ============================================================ */
+.lang-toggle {
+  background: none; border: 1px solid var(--border); border-radius: 999px;
+  padding: 5px 11px; font-size: 12.5px; font-weight: 600; letter-spacing: 0.04em;
+  color: var(--plum-soft); cursor: pointer; transition: background 0.2s var(--ease), color 0.2s var(--ease);
+  font-family: var(--font-body); line-height: 1.2;
+}
+.lang-toggle:hover { background: var(--blush); color: var(--rose-ink); }
+
+/* ============================================================
+   Persian (RTL) — active when <html dir="rtl"> (html.lang-fa)
+   ============================================================ */
+:root { --font-fa: 'Vazirmatn', 'Jost', 'Segoe UI', system-ui, sans-serif; }
+html.lang-fa { --font-body: var(--font-fa); --font-display: var(--font-fa); }
+/* Persian script should not be letter-spaced */
+html.lang-fa .eyebrow, html.lang-fa .nav a, html.lang-fa .logo__text, html.lang-fa .logo__sub,
+html.lang-fa .btn, html.lang-fa .btn-link, html.lang-fa .badge, html.lang-fa .field label,
+html.lang-fa .filters__title, html.lang-fa .chip, html.lang-fa .footer h4, html.lang-fa .tag-pill,
+html.lang-fa .search-result__meta .brand, html.lang-fa .product-card__brand,
+html.lang-fa .filters-toggle, html.lang-fa .announce, html.lang-fa .footer__legal a,
+html.lang-fa .journal-card__date, html.lang-fa .article__date, html.lang-fa .pd__label,
+html.lang-fa .section-head, html.lang-fa .status-pill { letter-spacing: 0; }
+
+/* Arrow glyphs point the other way in RTL */
+html[dir='rtl'] .arrow { display: inline-block; transform: scaleX(-1); }
+
+/* Mirrored geometry */
+html[dir='rtl'] .nav a::after { left: auto; right: 0; }
+html[dir='rtl'] .mobile-menu__panel { left: auto; right: 0; transform: translateX(100%); }
+html[dir='rtl'] .drawer__panel { right: auto; left: 0; transform: translateX(-100%); box-shadow: 20px 0 60px rgba(0,0,0,0.15); }
+html[dir='rtl'] .hero__badge { left: auto; right: 40px; }
+html[dir='rtl'] .product-card__badges { left: auto; right: 12px; }
+html[dir='rtl'] .product-card__wish { right: auto; left: 10px; }
+html[dir='rtl'] .hero__media::before { inset: 40px 40px -40px -40px; }
+html[dir='rtl'] .story__media { padding: 0 56px 56px 0; }
+html[dir='rtl'] .story__media-side { left: auto; right: 0; }
+html[dir='rtl'] .story__arrow { right: auto; left: -18px; }
+html[dir='rtl'] .carousel__arrows { right: auto !important; left: 0; }
+html[dir='rtl'] .pd__meta-list svg { margin-right: 0; margin-left: 8px; }
+html[dir='rtl'] .filter-check .n { margin-left: 0; margin-right: auto; }
+html[dir='rtl'] .lightbox__close { right: auto; left: 26px; }
+html[dir='rtl'] .lightbox__nav--prev { left: auto; right: 24px; }
+html[dir='rtl'] .lightbox__nav--next { right: auto; left: 24px; }
+html[dir='rtl'] .prose ul { padding-left: 0; padding-right: 22px; }
+html[dir='rtl'] .skip-link { left: auto; right: -9999px; border-radius: 0 0 0 var(--radius-s); }
+html[dir='rtl'] .skip-link:focus { right: 0; }
+html[dir='rtl'] .section-head--split, html[dir='rtl'] .order-box, html[dir='rtl'] .account-nav button,
+html[dir='rtl'] .faq-item__q, html[dir='rtl'] .search-result { text-align: right; }
